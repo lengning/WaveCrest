@@ -9,14 +9,14 @@ that can be used to identify additional dynamic genes.
 
 ## Installation
 
-SCPattern R package and its vignette could be found at https://github.com/lengning/SCPattern/tree/master/package
+WaveCrest R package and its vignette could be found at https://github.com/lengning/WaveCrest/tree/master/package
 
-To install SCPattern, in R run: 
+To install WaveCrest, in R run: 
 
 > install.packages("devtools")
 
 > library(devtools)
 
-> install_github("lengning/SCPattern/package/SCPattern")
+> install_github("lengning/WaveCrest/package/WaveCrest")
 
 Or install locally.
