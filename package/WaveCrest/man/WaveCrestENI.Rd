@@ -10,8 +10,7 @@ N=20000, NCThre=1000)
 \arguments{
 \item{GeneList}{A vector that contains genes to use for reordering.}
 
-\item{Data}{gene-by-sample matrix or isoform-by-sample matrix. It should be rescaled to values bwteen
-[-1,1].}
+\item{Data}{gene-by-sample matrix or isoform-by-sample matrix. It should be rescaled to gene specific z scores.}
 
 \item{Conditions}{A factor indicates the condition (time/spatial point) which
 each sample belongs to. The levels of the factor should be sorted

@@ -8,8 +8,7 @@ WaveCrestIden(Data, Order, Ndg=5, MeanLOD=10)
 N=20000, NCThre=1000)
 }
 \arguments{
-\item{Data}{gene-by-sample matrix or isoform-by-sample matrix. It should be rescaled to values bwteen
-[-1,1].}
+\item{Data}{gene-by-sample matrix or isoform-by-sample matrix. It should be rescaled to gene specific z scores}
 
 \item{Order}{A numeric vector indicates the reconstructed cell order.}
 
