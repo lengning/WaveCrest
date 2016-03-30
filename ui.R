@@ -103,9 +103,9 @@ shinyUI(pageWithSidebar(
                       br() ,
                       br(),
                       br(),
-                      br(),
                       br()
                ),
+               br(),
                br(),
                actionButton("Submit","Submit for processing")
   ),
