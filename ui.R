@@ -8,7 +8,7 @@ shinyUI(pageWithSidebar(
   headerPanel("Wave-Crest"),
   
   # Sidebar with sliders that demonstrate various available options
-  sidebarPanel(width=12,height=18,
+  sidebarPanel(width=12,height=20,
                # file
                fileInput("filename", label = "File input (support .csv, .txt, .tab)"),
                
