@@ -5,7 +5,7 @@ options(shiny.maxRequestSize=500*1024^2)
 # Define UI for slider demo application
 shinyUI(pageWithSidebar(
   #  Application title
-  headerPanel("WaveCrest"),
+  headerPanel("Wave-Crest"),
   
   # Sidebar with sliders that demonstrate various available options
   sidebarPanel(width=12,height=15,
@@ -13,7 +13,7 @@ shinyUI(pageWithSidebar(
                fileInput("filename", label = "File input (support .csv, .txt, .tab)"),
                
                # grouping vector
-               fileInput("ConditionVector", label = "Condition vector \n file name (support .csv, .txt, .tab)"),
+               fileInput("ConditionVector", label = "Condition vector \n file name (e.g. collection time. support .csv, .txt, .tab)"),
                
                # List of key markers 
                fileInput("Markers", label = "List of key markers \n file name (support .csv, .txt, .tab)"),
@@ -21,12 +21,12 @@ shinyUI(pageWithSidebar(
                column(4,
                       # Num permutation
                       numericInput("Permu",
-                      label = "The number of iteration for ENI",
+                      label = "The number of iteration for 2-opt",
                       value = 20000),
                       
                       # Identify additional genes
                       radioButtons("Iden_buttons",
-                                   label = "Identify additional dynamic genes based on the recovered order?",
+                                   label = "Identify additional dynamic genes based on the recovered order ('fishing')?",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
                                    selected = 1),
@@ -41,8 +41,8 @@ shinyUI(pageWithSidebar(
                                    selected = 3),
                       # set seed
                       numericInput("Seed", 
-                                   label = "Set seed (random number generation)", 
-                                   value = 123),
+                                   label = "Set seed (for random number generator)", 
+                                   value = 1),
                       
                       radioButtons("MarkerPlot_buttons",
                                    label = "Plot key markers following recovered cell order?",
@@ -89,7 +89,7 @@ shinyUI(pageWithSidebar(
                       
                       # export gene list with p-value (IdenRes)
                       textInput("exGListFileName", 
-                                label = "Export file name - genes sorted by strength of dynamics", 
+                                label = "Export file name - genes sorted by fishing MSE", 
                                 value = "genes_by_dynamic"),
                       
                       # plot name
