@@ -35,7 +35,7 @@ In R, run:
 
 > runGitHub('lengning/WaveCrest')
 
-[Screenshot]
+![Screenshot](https://github.com/lengning/WaveCrest/blob/master/figs/wavecrestscreen.png)
 
 ## 2. Input files
 
