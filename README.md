@@ -29,8 +29,10 @@ To install WaveCrest, in R run:
 
 Or install locally.
 
+R users may run WaveCrest following the vignette here https://github.com/lengning/WaveCrest/blob/master/package/WaveCrestVig_v1.pdf and skip the installation of shiny and shinyFiles. 
+
 ### Run the app
-In R, run:
+To launch WaveCrest GUI, in R run:
 
 > library(shiny)
 
@@ -60,15 +62,21 @@ An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** cou
 - Condition vector shows there are 30 cells in each time points
 - Marker vecter contains the list of 8 markers
 
+
+
 ## 3. Customize options
-- The number of iteration for ENI: Default is 20000. 
--	Identify additional dynamic genes based on the recovered order?: If Yes, users can 'rescue' gene that were not considered as markers
+
+By default, the WaveCrest GUI will first recover the cell order based on the markers of interest. In the recovered order, cells from different conditions (time points) are not allowed to be mixed.
+If specified, the WaveCrest GUI will further detect additional genes with dynamic profile following the recovered cell order.  
+
+- The number of iteration for 2-opt: Default is 20000. Increasing the number of iteration may improve the ordering results, but will result in longer run time.
+-	Identify additional dynamic genes based on the recovered order?: If Yes, users can identify additional genes that have dynamic profile following the recovered cell order.
 - What type of trend do you expect?: If we assume the target temporal pattern of each marker is monotone increasing (decreasing) from the first cell to the last cell, **Linear** should be used. If the target temporal pattern is expected to follow a quadratic / cubic / quartic polynomial,  **Quadratic / Cubic / Quartic** should be selected. An example quartic form may be bi-modal expression over time. 
--	Set seed (random number generation): The users can reproduce the results by setting the same seed for different runs.
-- Plot key markers following recovered cell order?: If Yes, plot of input markers following recovered cell order will be generated. 
-- Plot additional dynamic genes following recovered cell order?: If Yes, plot of additional dynamic genes following recovered cell order will be generated. 
+-	Set seed (random number generator): The users can reproduce the results by setting the same seed for different runs.
+- Plot key markers following recovered cell order?: If Yes, expression plots of input markers following recovered cell order will be generated. 
+- Plot additional dynamic genes following recovered cell order?: If Yes, expression plots of additional dynamic genes following recovered cell order will be generated. 
 -	Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, top 10 genes will be included in the output plots.
-- Plot in log scale?: Whether take a log scale in plot.
+- Plot in log scale?: Whether plot the expressions in log scale.
 - Output directory, will be set as home directory (~/) if it is empty.
 - Output file name for the normalized expression following original cell order.
 - Output file name for the normalized expression following recovered cell order.
@@ -81,11 +89,11 @@ Two to five files will be generated:
 -	normalized.csv: normalized expression matrix with genes in row and cells in column following original cell order.
 -	normalized_ENI.csv: normalized expression matrix with genes in row and cells in column following recovered cell order.
 
-- PlotMarkers.pdf: This file will be generated only when the user chooses to plot key markers. In each plot, x-axis shows cells by recovered order and y-axis shows expression. 
+- PlotMarkers.pdf: This file will be generated only when the user chooses to plot key markers. In each plot, x-axis shows cells following recovered order and y-axis shows normalized expression. 
 
--	genes_by_dynamic.csv: This file will be generated only when the user chooses to identify additional dynamic genes. Genes (non-marker) are listed with their corresponding MSEs. Genes are sorted by MSE.
+-	genes_by_dynamic.csv: This file will be generated only when the user chooses to identify additional dynamic genes. Genes (non-marker) are listed with their corresponding mean squared errors (MSEs). Genes are sorted by MSE.
 
-- PlotDynamic.pdf: This file will be generated only when the user chooses to identify additional dynamic genes and choose to plot additional dynamic genes. In each plot, x-axis shows cells by recovered order and y-axis shows expression. 
+- PlotDynamic.pdf: This file will be generated only when the user chooses to identify additional dynamic genes and choose to plot additional dynamic genes. In each plot, x-axis shows cells following recovered order and y-axis shows normalized expression. 
  
 ## Note
 The 'create new folder' button in the output folder selection pop-up is disfunctional right now
