@@ -102,6 +102,8 @@ shinyUI(pageWithSidebar(
                                 value = "PlotDynamic"),
                       br() ,
                       br(),
+                      br(),
+                      br(),
                       br()
                ),
                br(),
