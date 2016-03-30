@@ -100,9 +100,11 @@ shinyUI(pageWithSidebar(
                       textInput("exDynamicPlotFileName", 
                                 label = "Export file name for the plots? (additional genes follwing recovered order)", 
                                 value = "PlotDynamic"),
-                      br() 
+                      br() ,
+                      br(),
+                      br()
                ),
-               
+               br(),
                actionButton("Submit","Submit for processing")
   ),
   
