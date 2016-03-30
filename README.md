@@ -28,7 +28,7 @@ To install WaveCrest, in R run:
 
 Or install locally.
 
-## Run the app
+### Run the app
 In R, run:
 
 > library(shiny)
@@ -51,7 +51,7 @@ The second input file is the condition (time points) vector. It could be csv or 
 The third input file is the marker vector. It could be csv or tab delimited file. The file should contain
 1 column. If marker input file is missing, all genes will considered as markers. If a marker is not included in the expression matrix, the marker will be excluded for the analysis.
 
-#### Example files
+### Example files
 An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** could be found at https://github.com/lengning/WaveCrest/   
 - Expression matrix contains 200 genes and 120 cells 
 - Condition vector shows there are 30 cells in each time points
