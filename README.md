@@ -3,12 +3,13 @@
 
 WaveCrest is a statistical approach to
 reconstruct gene expression trajectory in single cell RNA-seq experiments with ordered conditions.
-WaveCrest contains two modules - the first module implements an extended nearest insertion (ENI) algorithm that
-searches for optimal cell orders, and the second module implements a spline fitting module
-that can be used to identify additional dynamic genes.
+WaveCrest contains two modules - the first module implements an extended nearest insertion (ENI) algorithm and
+a 2-opt algorithm that
+search for optimal cell orders, and the second module implements a 'fishing' algorithm
+that can be used to identify additional dynamic genes following the recovered order.
 
 ## 1. Installation
-The WaveCrest GUI requires the following packages: shiny, shinyFiles, WaveCrest
+To run the WaveCrest graphical user interface (GUI), it requires the following packages: shiny, shinyFiles, WaveCrest
 
 To install the shiny packages, in R run:
 
@@ -45,14 +46,16 @@ Currently the program only takes csv files or tab delimited file.
 The input file will be treated as a tab delimited file if the suffix is not '.csv'.
 
 
-The second input file is the condition (time points) vector. It could be csv or tab delimited file. The file should contain
-1 column. The i th component represents the condition that cell i belongs to. The length of the condition vector should be the same as the number of cells in the first input file. Two or more conditions are expected. If condition input file is missing, all cells are considered to be one condition.
+The second input file is the condition vector. The conditions could be time points, spatial positions, etc. 
+It could be csv or tab delimited file. The file should contain
+1 column. The i th component represents the condition that cell i belongs to. The length of the condition vector should be the same as the number of cells in the first input file. Two or more conditions are expected. If condition input file is missing, all cells are considered to be from one condition.
 
 The third input file is the marker vector. It could be csv or tab delimited file. The file should contain
-1 column. If marker input file is missing, all genes will considered as markers. If a marker is not included in the expression matrix, the marker will be excluded for the analysis.
+1 column, elements are the gene names.
+If marker input file is missing, all genes will considered as markers of interest. If a marker is not included in the expression matrix, the marker will be excluded for the analysis.
 
 ### Example files
-An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** could be found at https://github.com/lengning/WaveCrest/   
+An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** could be found at https://github.com/lengning/WaveCrest/tree/master/example_data   
 - Expression matrix contains 200 genes and 120 cells 
 - Condition vector shows there are 30 cells in each time points
 - Marker vecter contains the list of 8 markers
