@@ -69,6 +69,7 @@ An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** cou
 By default, the WaveCrest GUI will first recover the cell order based on the markers of interest. In the recovered order, cells from different conditions (time points) are not allowed to be mixed.
 If specified, the WaveCrest GUI will further detect additional genes with dynamic profile following the recovered cell order.  
 
+- Need normalization? If Yes, normalization will be performed prior to WaveCrest run. If the input matrix is normalized (e.g. by median-by-ratio normalization or TMM), this option should be disabled. In addition, if the input expression matrix only contains a small set of genes, it is suggested to normalize using all genes first before taking the subset.
 - The number of iteration for 2-opt: Default is 20000. Increasing the number of iteration may improve the ordering results, but will result in longer run time.
 -	Identify additional dynamic genes based on the recovered order?: If Yes, users can identify additional genes that have dynamic profile following the recovered cell order.
 - What type of trend do you expect?: If we assume the target temporal pattern of each marker is monotone increasing (decreasing) from the first cell to the last cell, **Linear** should be used. If the target temporal pattern is expected to follow a quadratic / cubic / quartic polynomial,  **Quadratic / Cubic / Quartic** should be selected. An example quartic form may be bi-modal expression over time. 
