@@ -7,7 +7,7 @@ WaveCrest contains two modules - the first module implements an extended nearest
 searches for optimal cell orders, and the second module implements a spline fitting module
 that can be used to identify additional dynamic genes.
 
-## Installation
+## 1. Installation
 The WaveCrest GUI requires the following packages: shiny, shinyFiles, WaveCrest
 
 To install the shiny packages, in R run:
@@ -51,7 +51,7 @@ The second input file is the condition (time points) vector. It could be csv or 
 The third input file is the marker vector. It could be csv or tab delimited file. The file should contain
 1 column. If marker input file is missing, all genes will considered as markers. If a marker is not included in the expression matrix, the marker will be excluded for the analysis.
 
-### Example files
+#### Example files
 An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** could be found at https://github.com/lengning/WaveCrest/   
 - Expression matrix contains 200 genes and 120 cells 
 - Condition vector shows there are 30 cells in each time points
