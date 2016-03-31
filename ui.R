@@ -21,8 +21,15 @@ shinyUI(pageWithSidebar(
                column(4,
                       # Num permutation
                       numericInput("Permu",
-                      label = "The number of iteration for 2-opt",
-                      value = 20000),
+                                   label = "The number of iteration for 2-opt",
+                                   value = 20000),
+                      
+                      # Normalization
+                      radioButtons("Norm_buttons",
+                                   label = "Do you need to normalize data?",
+                                   choices = list("Yes" = 1,
+                                                  "No" = 2),
+                                   selected = 1),
                       
                       # Identify additional genes
                       radioButtons("Iden_buttons",
@@ -30,7 +37,7 @@ shinyUI(pageWithSidebar(
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
                                    selected = 1),
-
+                      
                       # Identify additional genes
                       radioButtons("DF_buttons",
                                    label = "What type of trend do you expect?",
@@ -42,21 +49,22 @@ shinyUI(pageWithSidebar(
                       # set seed
                       numericInput("Seed", 
                                    label = "Set seed (for random number generator)", 
-                                   value = 1),
+                                   value = 1)
                       
+               ),
+               
+               column(width=4,
                       radioButtons("MarkerPlot_buttons",
                                    label = "Plot key markers following recovered cell order?",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
-                                   selected = 1)                      
-               ),
-               
-               column(width=4,
+                                   selected = 1),                      
+                      
                       radioButtons("AddPlot_buttons",
                                    label = "Plot additional dynamic genes folowing recovered cell order?",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
-                                   selected = 1),      					
+                                   selected = 1),        				
                       # num genes to plot
                       textInput("PlotNum", 
                                 label = "Number of additional genes to plot (if not specified, top 10 genes will be plotted)", 
@@ -69,18 +77,17 @@ shinyUI(pageWithSidebar(
                                                   "log2(expression + 1)" = 2),
                                    selected = 1),
                       br(),
-  
+ 
+                      
                       # output dir
-                      shinyDirButton('Outdir', 'output folder select', 'Please select a folder'),
-                      br(),
-                      br(),
+                      shinyDirButton('Outdir', 'output folder select', 'Please select a folder')
+                      ),
+               br(),
+               column(4,
                       # export normalzied matrix (original order)
                       textInput("exNormFileName", 
                                 label = "Export file name - normalized expression matrix (following original cell order)", 
-                                value = "normalized")
-               ),
-               
-               column(4,
+                                value = "normalized"),
                       
                       # export normalzied matrix (recovered order)
                       textInput("exENINormFileName", 
@@ -91,19 +98,15 @@ shinyUI(pageWithSidebar(
                       textInput("exGListFileName", 
                                 label = "Export file name - genes sorted by fishing MSE", 
                                 value = "genes_by_dynamic"),
-                      
                       # plot name
                       textInput("exMarkerPlotFileName", 
                                 label = "Export file name for the plots? (key markers follwing recovered order)", 
                                 value = "PlotMarkers"),
-               
+                      
                       textInput("exDynamicPlotFileName", 
                                 label = "Export file name for the plots? (additional genes follwing recovered order)", 
-                                value = "PlotDynamic"),
-                      br() ,
-                      br(),
-                      br(),
-                      br()
+                                value = "PlotDynamic")
+
                ),
                br(),
                br(),
