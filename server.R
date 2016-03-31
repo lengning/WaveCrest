@@ -49,6 +49,7 @@ shinyServer(function(input, output, session) {
       GroupFile=Group.file,
       MarkerFile=Marker.file,
       Permu=input$Permu, 
+      NormTF = input$Norm_buttons,
       Cond=factor(GroupV, levels=unique(GroupV)),# follow the order they appeared
       Marker=factor(MarkerV, levels=unique(MarkerV)),# follow the order they appeared
       test=ifelse(input$Iden_buttons=="1",TRUE,FALSE), 
@@ -71,12 +72,18 @@ shinyServer(function(input, output, session) {
     numdegree = switch(List$testDF,"1"=1,"2"=2,"3"=3,"4"=4)
     if(!List$test)List$PlotAddTF = FALSE
     # normalization     
+    if(List$NormTF){
     Sizes <- MedianNorm(Data)
     if(is.na(Sizes[1])){
       Sizes <- MedianNorm(Data, alternative=TRUE)
       message("alternative normalization method is applied")
     }
     DataUse <- GetNormalizedMat(Data,Sizes)
+    }
+    
+    if(!List$NormTF){
+      DataUse <- Data
+    }
     # main function
     if(length(which(!List$Marker %in% rownames(Data)))>0) {
       print("Warning: not all provided markers are in data matrix")
