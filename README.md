@@ -36,6 +36,8 @@ To launch WaveCrest GUI, in R run:
 
 > library(shiny)
 
+> library(shinyFiles)
+
 > runGitHub('lengning/WaveCrest')
 
 ![Screenshot](https://github.com/lengning/WaveCrest/blob/master/figs/wavecrestscreen.png)
