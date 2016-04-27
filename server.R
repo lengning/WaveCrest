@@ -49,7 +49,7 @@ shinyServer(function(input, output, session) {
       GroupFile=Group.file,
       MarkerFile=Marker.file,
       Permu=input$Permu, 
-      NormTF = input$Norm_buttons,
+      NormTF = ifelse(input$Norm_buttons=="1",TRUE,FALSE), 
       Cond=factor(GroupV, levels=unique(GroupV)),# follow the order they appeared
       Marker=factor(MarkerV, levels=unique(MarkerV)),# follow the order they appeared
       test=ifelse(input$Iden_buttons=="1",TRUE,FALSE), 
