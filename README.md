@@ -11,6 +11,8 @@ that can be used to identify additional dynamic genes following the recovered or
 ## 1. Installation
 To run the WaveCrest graphical user interface (GUI), it requires the following packages: shiny, shinyFiles, WaveCrest
 
+R version ≥ 3.0.2 is needed. For mac user, make sure whether xcode is installed.
+
 To install the shiny packages, in R run:
 
 > install.packages("shiny")
