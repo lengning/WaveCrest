@@ -76,13 +76,17 @@ shinyUI(pageWithSidebar(
                                    choices = list("No" = 1,
                                                   "log2(expression + 1)" = 2),
                                    selected = 1),
-                      br(),
- 
                       
                       # output dir
-                      shinyDirButton('Outdir', 'output folder select', 'Please select a folder')
+                      shinyDirButton('Outdir', 'output folder select', 'Please select a folder'),
+                      br(),
+                    
+                      # plot name
+                      textInput("InfoFileName", 
+                                label = "Export file name - input parameters and version info", 
+                                value = "WaveCrest_info")
                       ),
-               br(),
+               
                column(4,
                       # export normalzied matrix (original order)
                       textInput("exNormFileName", 
@@ -102,12 +106,11 @@ shinyUI(pageWithSidebar(
                       textInput("exMarkerPlotFileName", 
                                 label = "Export file name for the plots? (key markers follwing recovered order)", 
                                 value = "PlotMarkers"),
-                      
+                      # plot name
                       textInput("exDynamicPlotFileName", 
                                 label = "Export file name for the plots? (additional genes follwing recovered order)", 
                                 value = "PlotDynamic")
-
-               ),
+                      ),
                br(),
                br(),
                actionButton("Submit","Submit for processing")
