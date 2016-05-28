@@ -42,7 +42,7 @@ To launch WaveCrest GUI, in R run:
 
 > runGitHub('lengning/WaveCrest')
 
-![Screenshot](https://github.com/lengning/WaveCrest/blob/master/figs/wavecrestscreen.png)
+![Screenshot](https://github.com/lengning/WaveCrest/blob/master/wavecrestscreen.png)
 
 ## 2. Input files
 
