@@ -10,6 +10,8 @@ shinyServer(function(input, output, session) {
   shinyDirChoose(input, 'Outdir', roots=volumes, session=session, restrictions=system.file(package='base'))
   output$Dir <- renderPrint({parseDirPath(volumes, input$Outdir)})
   
+  wcinfo = sessionInfo(package="WaveCrest")
+  wcinfo_print = wcinfo$otherPkgs
   
   In <- reactive({
     print(input$Outdir)
@@ -65,7 +67,8 @@ shinyServer(function(input, output, session) {
       whetherLog = ifelse(input$log_whether=="1",FALSE,TRUE),
       PlotN = input$PlotNum,
       MarkerPlotF = paste0(outdir,input$exMarkerPlotFileName,".pdf"),
-      DynamicPlotF = paste0(outdir,input$exDynamicPlotFileName,".pdf")    
+      DynamicPlotF = paste0(outdir,input$exDynamicPlotFileName,".pdf"),  
+      Info = paste0(outdir,input$InfoFileName,".txt")
     )
     if(is.null(Marker.file) & List$test==TRUE) print("Warning: All genes are used as markers")
     if(is.null(Marker.file)) List$test=FALSE
@@ -107,6 +110,7 @@ shinyServer(function(input, output, session) {
     write.csv(DataUse, file=List$exExpF)
     write.csv(DataUse[,ENIRes], file=List$exENIExpF)
     
+    
     if(List$PlotMarkerTF){
       PN <- length(List$Marker)
         pdf(List$MarkerPlotF, height=15,width=15)
@@ -140,6 +144,23 @@ shinyServer(function(input, output, session) {
         }
         dev.off()
       }}
+    
+    ## Sessioninfo & input parameters
+    sink(List$Info)
+    print(paste0("Package version: ", "WaveCrest_",wcinfo_print$WaveCrest$Version))
+    print("Input parameters")
+    print(paste0("the number of iteration for 2-opt? ", List$Permu))
+    print(paste0("whether normalize data? ", List$NormTF))
+    print(paste0("whether identify additional dynamic genes based on the recovered order? ", List$test))
+    print(paste0("what type of trend the user expect? ", List$testDF))
+    print(paste0("seed?: ",List$Seed))
+    print(paste0("whether plot key markers following recovered cell order? ", List$PlotMarkerTF))
+    print(paste0("whether plot additional genes following recovered cell order? ", List$PlotAddTF))
+    print(paste0("how many additional genes to plot? ", PN))
+    print(paste0("whether plot in log scale? ", List$whetherLog))
+    sink()
+    #sink(file="/tmp/none");sink("/dev/null")
+    
     
     List=c(List, list(Sig=DGlist))	
   }) 
