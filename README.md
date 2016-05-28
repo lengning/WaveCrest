@@ -83,6 +83,7 @@ If specified, the WaveCrest GUI will further detect additional genes with dynami
 -	Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, top 10 genes will be included in the output plots.
 - Plot in log scale?: Whether plot the expressions in log scale.
 - Output directory, will be set as home directory (~/) if it is empty.
+- Output file name for input paramters and version info.
 - Output file name for the normalized expression following original cell order.
 - Output file name for the normalized expression following recovered cell order.
 -	Output file name for the genes sorted by strength of dynamics. This file will not be generate if the second option ("Identify additional dynamic genes") is "No".
@@ -99,6 +100,8 @@ Two to five files will be generated:
 -	genes_by_dynamic.csv: This file will be generated only when the user chooses to identify additional dynamic genes. Genes (non-marker) are listed with their corresponding mean squared errors (MSEs). Genes are sorted by MSE.
 
 - PlotDynamic.pdf: This file will be generated only when the user chooses to identify additional dynamic genes and choose to plot additional dynamic genes. In each plot, x-axis shows cells following recovered order and y-axis shows normalized expression. 
+ 
+- WaveCrest_info.txt: This file contains all input parameters and version info.
  
 ## Note
 The 'create new folder' button in the output folder selection pop-up is disfunctional right now
