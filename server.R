@@ -116,10 +116,10 @@ shinyServer(function(input, output, session) {
         pdf(List$MarkerPlotF, height=15,width=15)
         par(mfrow=c(3,3))
         for(i in 1:PN){
-          if(List$whetherLog==TRUE) plot(log2(DataUse[List$Marker[i],ENIRes]+1), 
+          if(List$whetherLog==TRUE) plot(log2(DataUse[as.character(List$Marker[i]),ENIRes]+1), 
                                         col=as.numeric(List$Cond), ylab="log2(expression+1)",
                                         main=List$Marker[i])
-          if(List$whetherLog==FALSE) plot( DataUse[List$Marker[i],ENIRes], 
+          if(List$whetherLog==FALSE) plot( DataUse[as.character(List$Marker[i]),ENIRes], 
                                         col=as.numeric(List$Cond), ylab="expression",
                                         main=List$Marker[i] )  
         }
