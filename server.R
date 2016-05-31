@@ -92,7 +92,7 @@ shinyServer(function(input, output, session) {
       print("Warning: not all provided markers are in data matrix")
       List$Marker = intersect(rownames(Data),List$Marker)
     }
-    ENIRes <- WaveCrestENI(List$Marker, Data, List$Cond, Ndg =numdegree, N=List$Permu,Seed=List$Seed)	
+    ENIRes <- WaveCrestENI(List$Marker, DataUse, List$Cond, Ndg =numdegree, N=List$Permu,Seed=List$Seed)	
     print("WaveCrestENI...")
     
     if(List$test){
