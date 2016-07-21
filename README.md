@@ -108,4 +108,6 @@ The 'create new folder' button in the output folder selection pop-up is disfunct
 
 
 
+## License
+This project is licensed under the terms of the Apache License 2.0
 
