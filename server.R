@@ -2,7 +2,7 @@ library(shiny)
 library(shinyFiles)
 library(WaveCrest)
 #library(EBSeq)
-
+library(colourpicker)
 
 # Define server logic for slider examples
 shinyServer(function(input, output, session) {
@@ -61,13 +61,19 @@ shinyServer(function(input, output, session) {
       exExpF = paste0(outdir,input$exNormFileName,".csv"),
       exENIExpF = paste0(outdir,input$exENINormFileName,".csv"),		
       exDGF = paste0(outdir,input$exGListFileName,".csv"),
-      
+      UseCols = ifelse(input$UseCols=="1",TRUE,FALSE), 
+      LowCol = input$col1,
+      MidCol = input$col2,
+      HighCol = input$col3,
+      clusterRowT = ifelse(input$clusterRow=="1",TRUE,FALSE), 
       PlotMarkerTF = ifelse(input$MarkerPlot_buttons=="1",TRUE,FALSE), 
       PlotAddTF = ifelse(input$AddPlot_buttons=="1",TRUE,FALSE), 
+	  PlotHeatTF = ifelse(input$AddHeatMap_buttons=="1",TRUE,FALSE),
       whetherLog = ifelse(input$log_whether=="1",FALSE,TRUE),
       PlotN = input$PlotNum,
       MarkerPlotF = paste0(outdir,input$exMarkerPlotFileName,".pdf"),
       DynamicPlotF = paste0(outdir,input$exDynamicPlotFileName,".pdf"),  
+	  HeatMapF = paste0(outdir,input$exHeatMapPlotFileName,".pdf"),
       Info = paste0(outdir,input$InfoFileName,".txt")
     )
     if(is.null(Marker.file) & List$test==TRUE) print("Warning: All genes are used as markers")
@@ -124,9 +130,36 @@ shinyServer(function(input, output, session) {
                                         main=List$Marker[i] )  
         }
         dev.off()
-      }
+		
+    }
+    
+    
+	if(List$PlotHeatTF) {
+		if(List$UseCols == TRUE) {
+			getcols = greenred(100)
+			HeatCols = getcols[c(1:30, seq(31,70,3), 71:100)]
+		} else if(List$UseCols == FALSE) {
+			  getcols = colorpanel(100, List$LowCol, List$MidCol, List$HighCol)
+		    HeatCols = getcols[c(1:30, seq(31,70,3), 71:100)]
+			
+		}
+    
+	  data.reorder <- DataUse[as.character(List$Marker),ENIRes]
+	  data.reorder[data.reorder < 1] <- 1
+	  data.use.log <- log2(data.reorder)
+	  data.use.rs <- Rescale(data.use.log)
+	  
+	   pdf(List$HeatMapF, height=15,width=15)
+		
+		if(List$clusterRowT == TRUE) {
+					heatmap.2(data.use.rs, Colv=FALSE, trace='none',reorderfun=function(d,w)rev(d),col=HeatCols, mar=c(5,8))
+        } else {	
+			heatmap.2(data.use.rs, Colv=FALSE, trace='none',dendrogram='none', Rowv=FALSE,col=HeatCols, mar=c(5,8))
+		  }
+     dev.off()
+		}
 
-    #if(List$test){
+    
     if(List$PlotAddTF){      
       PN <- NULL
       if(List$PlotN!="")PN <- as.numeric(List$PlotN)
@@ -158,12 +191,14 @@ shinyServer(function(input, output, session) {
     print(paste0("whether plot additional genes following recovered cell order? ", List$PlotAddTF))
     print(paste0("how many additional genes to plot? ", PN))
     print(paste0("whether plot in log scale? ", List$whetherLog))
+    print(paste0("colors used in the heatmap: Low Color = ", List$LowCol,", Middle Color = ", List$MidCol, ", High Color = ", List$HighCol))
+    print(paste0("whether to cluster key markers in heatmap? ", List$clusterRow))
     sink()
     #sink(file="/tmp/none");sink("/dev/null")
     
     
     List=c(List, list(Sig=DGlist))	
-  }) 
+  })   
   
   Act <- eventReactive(input$Submit,{
     In()})
@@ -181,5 +216,5 @@ shinyServer(function(input, output, session) {
     t1
   },options = list(lengthManu = c(4,4), pageLength = 20))
   
-  #	output$done <- renderText({"Done"})
+
 })
