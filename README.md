@@ -9,7 +9,7 @@ search for optimal cell orders, and the second module implements a 'fishing' alg
 that can be used to identify additional dynamic genes following the recovered order.
 
 ## 1. Installation
-To run the WaveCrest graphical user interface (GUI), it requires the following packages: shiny, shinyFiles, WaveCrest
+To run the WaveCrest graphical user interface (GUI), it requires the following packages: shiny, shinyFiles, colourpicker, WaveCrest
 
 R version ≥ 3.0.2 is needed. For mac user, make sure whether xcode is installed.
 
@@ -18,6 +18,8 @@ To install the shiny packages, in R run:
 > install.packages("shiny")
 
 > install.packages("shinyFiles")
+
+> install.packages("colourpicker")
 
 WaveCrest R package and its vignette could be found at https://github.com/lengning/WaveCrest/tree/master/package
 
