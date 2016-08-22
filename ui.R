@@ -31,7 +31,7 @@ shinyUI(pageWithSidebar(
                                                   "No" = 2),
                                    selected = 1),
 				   #Log data for input
-                   radioButtons("logDataIn",
+                   radioButtons("Log_InData",
                                 label = "Use log data for input into WaveCrest?",
                                 choices = list("Yes" = 1,
                                                "No" = 2),
