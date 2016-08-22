@@ -126,7 +126,7 @@ shinyServer(function(input, output, session) {
 	#Test for additional genes
     if(List$test){
     DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
-    IdenRes <- WaveCrestIden(DataRemain,ENIRes.Order)
+    IdenRes <- WaveCrestIden(DataRemain,ENIRes.Order, Ndg = numdegree)
     IdenRes <- sort(IdenRes, decreasing = TRUE)
     DGlist <- cbind(names(IdenRes),IdenRes)
     colnames(DGlist) <- c("gene", "MSE")
@@ -142,7 +142,7 @@ shinyServer(function(input, output, session) {
     
     if(List$PlotMarkerTF){
       PN <- length(List$Marker)
-        pdf(List$MarkerPlotF, height=15,width=20)
+        pdf(List$MarkerPlotF, height=10,width=15)
         par(mfrow=c(3,3))
         for(i in 1:PN){
           if(List$whetherLog==TRUE) plot(log2(Data[List$Marker[i],ENIRes.Order]+1), 
@@ -191,7 +191,7 @@ shinyServer(function(input, output, session) {
       if(List$PlotN!="")PN <- as.numeric(List$PlotN)
       else PN <- 10  
       if(length(PN)>0){
-        pdf(List$DynamicPlotF, height=15,width=15)
+        pdf(List$DynamicPlotF, height=10,width=15)
         par(mfrow=c(3,3))
         for(i in 1:PN){
             if(List$whetherLog==TRUE) plot(log2(Data[names(IdenRes)[i],ENIRes.Order]+1), 
