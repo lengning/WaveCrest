@@ -104,7 +104,7 @@ shinyServer(function(input, output, session) {
       List$Marker = intersect(rownames(Data),List$Marker)
     }
 	
-	if(LogInTF == TRUE) {
+	if(List$LogInTF == TRUE) {
 		DataUse[which(DataUse < 1)] <- 1 # truncate values less than one
 	    DataUse <- log2(DataUse) # log2 of the truncated data
 	}
@@ -113,7 +113,7 @@ shinyServer(function(input, output, session) {
 	set.seed(List$Seed)
     rd <- sample(1:ncol(DataUse),ncol(DataUse)) 
     DataUse.rand <- DataUse[,rd]
-	Cond.rand <- List$Cond[,rd]
+	Cond.rand <- List$Cond[rd]
     
 	#Get cell orders
     ENIRes <- WaveCrestENI(List$Marker, DataUse.rand, Cond.rand, Ndg = numdegree, N = List$Permu, Seed = List$Seed)	
