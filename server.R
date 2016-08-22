@@ -121,7 +121,7 @@ shinyServer(function(input, output, session) {
     
 	
 	ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
-	
+	 
 	
 	#Test for additional genes
     if(List$test){
