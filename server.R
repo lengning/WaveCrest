@@ -44,6 +44,7 @@ shinyServer(function(input, output, session) {
     }
     MarkerV=MarkerVIn[[1]]
     
+	print(input)
     # Compose data frame
     #input$filename$name
     List <- list(
@@ -52,12 +53,12 @@ shinyServer(function(input, output, session) {
       MarkerFile=Marker.file,
       Permu=input$Permu, 
       NormTF = ifelse(input$Norm_buttons=="1",TRUE,FALSE), 
+	  LogInTF=input$logDataIn,
       Cond=factor(GroupV, levels=unique(GroupV)),# follow the order they appeared
       Marker=MarkerV,# follow the order they appeared
       test=ifelse(input$Iden_buttons=="1",TRUE,FALSE), 
       testDF=input$DF_buttons, 
       Seed=input$Seed,
-	  LogInTF=input$logDataIn,
       Dir=outdir, 
       exExpF = paste0(outdir,input$exNormFileName,".csv"),
       exENIExpF = paste0(outdir,input$exENINormFileName,".csv"),		
