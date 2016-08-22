@@ -53,10 +53,11 @@ shinyServer(function(input, output, session) {
       Permu=input$Permu, 
       NormTF = ifelse(input$Norm_buttons=="1",TRUE,FALSE), 
       Cond=factor(GroupV, levels=unique(GroupV)),# follow the order they appeared
-      Marker=factor(MarkerV, levels=unique(MarkerV)),# follow the order they appeared
+      Marker=MarkerV,# follow the order they appeared
       test=ifelse(input$Iden_buttons=="1",TRUE,FALSE), 
       testDF=input$DF_buttons, 
       Seed=input$Seed,
+	  LogInTF=input$logDataIn,
       Dir=outdir, 
       exExpF = paste0(outdir,input$exNormFileName,".csv"),
       exENIExpF = paste0(outdir,input$exENINormFileName,".csv"),		
@@ -87,24 +88,45 @@ shinyServer(function(input, output, session) {
       Sizes <- MedianNorm(Data, alternative=TRUE)
       message("alternative normalization method is applied")
     }
-    DataUse <- GetNormalizedMat(Data,Sizes)
+    Data <- GetNormalizedMat(Data,Sizes)
     }
     
     if(!List$NormTF){
-      DataUse <- Data
+      Data <- Data
     }
+	
+	DataUse <- Data
+	
     # main function
     if(length(which(!List$Marker %in% rownames(Data)))>0) {
       print("Warning: not all provided markers are in data matrix")
       List$Marker = intersect(rownames(Data),List$Marker)
     }
-    ENIRes <- WaveCrestENI(List$Marker, DataUse, List$Cond, Ndg =numdegree, N=List$Permu,Seed=List$Seed)	
+	
+	if(LogInTF == TRUE) {
+		DataUse[which(DataUse < 1)] <- 1 # truncate values less than one
+	    DataUse <- log2(DataUse) # log2 of the truncated data
+	}
+	
+	#select random starting order
+	set.seed(List$Seed)
+    rd <- sample(1:ncol(DataUse),ncol(DataUse)) 
+    DataUse.rand <- DataUse[,rd]
+	Cond.rand <- List$Cond[,rd]
+    
+	#Get cell orders
+    ENIRes <- WaveCrestENI(List$Marker, DataUse.rand, Cond.rand, Ndg = numdegree, N = List$Permu, Seed = List$Seed)	
     print("WaveCrestENI...")
     
+	
+	ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
+	
+	
+	#Test for additional genes
     if(List$test){
     DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
-    IdenRes <- WaveCrestIden(DataRemain,ENIRes)
-    #browser()
+    IdenRes <- WaveCrestIden(DataRemain,ENIRes.Order)
+    IdenRes <- sort(IdenRes, decreasing = TRUE)
     DGlist <- cbind(names(IdenRes),IdenRes)
     colnames(DGlist) <- c("gene", "MSE")
     write.csv(DGlist,file=List$exDGF)
@@ -113,19 +135,19 @@ shinyServer(function(input, output, session) {
       DGlist=c("nope")
     }
       
-    write.csv(DataUse, file=List$exExpF)
-    write.csv(DataUse[,ENIRes], file=List$exENIExpF)
+    write.csv(Data, file=List$exExpF) #write input 
+    write.csv(Data[,ENIRes.Order], file=List$exENIExpF) #write input with order
     
     
     if(List$PlotMarkerTF){
       PN <- length(List$Marker)
-        pdf(List$MarkerPlotF, height=15,width=15)
+        pdf(List$MarkerPlotF, height=15,width=20)
         par(mfrow=c(3,3))
         for(i in 1:PN){
-          if(List$whetherLog==TRUE) plot(log2(DataUse[as.character(List$Marker[i]),ENIRes]+1), 
+          if(List$whetherLog==TRUE) plot(log2(Data[List$Marker[i],ENIRes.Order]+1), 
                                         col=as.numeric(List$Cond), ylab="log2(expression+1)",
                                         main=List$Marker[i])
-          if(List$whetherLog==FALSE) plot( DataUse[as.character(List$Marker[i]),ENIRes], 
+          if(List$whetherLog==FALSE) plot(Data[List$Marker[i],ENIRes.Order], 
                                         col=as.numeric(List$Cond), ylab="expression",
                                         main=List$Marker[i] )  
         }
@@ -139,22 +161,25 @@ shinyServer(function(input, output, session) {
 			getcols = greenred(100)
 			HeatCols = getcols[c(1:30, seq(31,70,3), 71:100)]
 		} else if(List$UseCols == FALSE) {
-			  getcols = colorpanel(100, List$LowCol, List$MidCol, List$HighCol)
-		    HeatCols = getcols[c(1:30, seq(31,70,3), 71:100)]
+			    getcols = colorpanel(100, List$LowCol, List$MidCol, List$HighCol)
+		    	HeatCols = getcols[c(1:30, seq(31,70,3), 71:100)]
 			
 		}
     
-	  data.reorder <- DataUse[as.character(List$Marker),ENIRes]
+	  data.reorder <- Data[List$Marker,ENIRes.Order]
 	  data.reorder[data.reorder < 1] <- 1
 	  data.use.log <- log2(data.reorder)
 	  data.use.rs <- Rescale(data.use.log)
 	  
-	   pdf(List$HeatMapF, height=15,width=15)
+	  if(length(List$Marker) < ncol(Data)) {hght = 6; wght = 10};
+	  if(length(List$Marker) >= ncol(Data)) {hght = 12; wght = 6}; 	 
+
+	  pdf(List$HeatMapF, height=hght,width=wght)
 		
 		if(List$clusterRowT == TRUE) {
-					heatmap.2(data.use.rs, Colv=FALSE, trace='none',reorderfun=function(d,w)rev(d),col=HeatCols, mar=c(5,8))
+			heatmap.2(data.use.rs, Colv=FALSE, trace='none', reorderfun=function(d,w)rev(d),col = HeatCols, mar = c(5,8))
         } else {	
-			heatmap.2(data.use.rs, Colv=FALSE, trace='none',dendrogram='none', Rowv=FALSE,col=HeatCols, mar=c(5,8))
+			heatmap.2(data.use.rs, Colv=FALSE, trace='none', dendrogram='none', Rowv=FALSE, col = HeatCols, mar = c(5,8))
 		  }
      dev.off()
 		}
@@ -168,10 +193,10 @@ shinyServer(function(input, output, session) {
         pdf(List$DynamicPlotF, height=15,width=15)
         par(mfrow=c(3,3))
         for(i in 1:PN){
-            if(List$whetherLog==TRUE)plot(log2(DataUse[names(IdenRes)[i],ENIRes]+1), 
+            if(List$whetherLog==TRUE) plot(log2(Data[names(IdenRes)[i],ENIRes.Order]+1), 
                                             col=as.numeric(List$Cond), ylab="log2(expression+1)",
                                             main=names(IdenRes)[i])
-            if(List$whetherLog==FALSE)plot(DataUse[names(IdenRes)[i],ENIRes], 
+            if(List$whetherLog==FALSE) plot(Data[names(IdenRes)[i],ENIRes.Order], 
                                            col=as.numeric(List$Cond), ylab="expression",
                                            main=names(IdenRes)[i])  
         }
