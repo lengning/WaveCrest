@@ -30,7 +30,12 @@ shinyUI(pageWithSidebar(
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
                                    selected = 1),
-                      
+				   #Log data for input
+                   radioButtons("logDataIn",
+                                label = "Use log data for input into WaveCrest?",
+                                choices = list("Yes" = 1,
+                                               "No" = 2),
+                                selected = 1),
                       # Identify additional genes
                       radioButtons("Iden_buttons",
                                    label = "Identify additional dynamic genes based on the recovered order ('fishing')?",
