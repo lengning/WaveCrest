@@ -15,8 +15,7 @@ shinyServer(function(input, output, session) {
   
   In <- reactive({
     print(input$Outdir)
-	outdir <- paste0("~", do.call("file.path", input$Outdir[[1]]), "/")
-    # outdir <- paste0("~/",input$Outdir[[1]][[2]],"/")
+    outdir <- paste0("~/",input$Outdir[[1]][[2]],"/")
     print(outdir)
     
     the.file <- input$filename$name
@@ -136,7 +135,7 @@ shinyServer(function(input, output, session) {
     if(!List$test){
       DGlist=c("nope")
     }
-      
+      print("Identify additional genes...")
     write.csv(Data, file=List$exExpF) #write input 
     write.csv(Data[,ENIRes.Order], file=List$exENIExpF) #write input with order
     
