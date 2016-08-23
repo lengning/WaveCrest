@@ -50,25 +50,22 @@ To launch WaveCrest GUI, in R run:
 
 ## 2. Input files
 
-The first input file should be the expression matrix. 
-Rows are the genes and columns are the cells.
-Currently the program only takes csv files or tab delimited file.
+The first input file should be the expression matrix, with genes in rows and cells as columns. 
+Currently, only takes csv files or tab delimited file are accepted.
 The input file will be treated as a tab delimited file if the suffix is not '.csv'.
 
 
-The second input file is the condition vector. The conditions could be time points, spatial positions, etc. 
-It could be csv or tab delimited file. The file should contain
-1 column. The i th component represents the condition that cell i belongs to. The length of the condition vector should be the same as the number of cells in the first input file. Two or more conditions are expected. If condition input file is missing, all cells are considered to be from one condition.
+The second input file is the Condition vector. The conditions could be time points, spatial positions, etc. 
+It can be csv or tab delimited file. The file should contain 1 column. Each element of the should represent the corresponding condition that each cell belongs to, it should match exactly the order of columns in the expression matrix and be the same length. If condition input file is missing, all cells are considered to be from one condition.
 
-The third input file is the marker vector. It could be csv or tab delimited file. The file should contain
-1 column, elements are the gene names.
-If marker input file is missing, all genes will considered as markers of interest. If a marker is not included in the expression matrix, the marker will be excluded for the analysis.
+The third input file is the Marker vector. It can be csv or tab delimited file. The file should contain
+1 column of gene names. These genes will be used to do the reordering in WaveCrest. If the marker input file is missing, all genes will considered as markers of interest. If a marker gene is not included in the expression matrix, the marker will be excluded from the analysis.
 
 ### Example files
-An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** could be found at https://github.com/lengning/WaveCrest/tree/master/example_data   
-- Expression matrix contains 200 genes and 120 cells 
-- Condition vector shows there are 30 cells in each time points
-- Marker vecter contains the list of 8 markers
+An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** can be found at https://github.com/lengning/WaveCrest/tree/master/example_data   
+- Expression matrix contains 200 genes and 120 cells.
+- Condition vector indicating there are 30 cells for each time point.
+- Marker vector contains a list of 8 marker genes.
 
 
 
@@ -77,22 +74,40 @@ An example input file **exData.csv**, **Condition.csv**, and **Markers.csv** cou
 By default, the WaveCrest GUI will first recover the cell order based on the markers of interest. In the recovered order, cells from different conditions (time points) are not allowed to be mixed.
 If specified, the WaveCrest GUI will further detect additional genes with dynamic profile following the recovered cell order.  
 
-- Need normalization? If Yes, normalization will be performed prior to WaveCrest run. If the input matrix is normalized (e.g. by median-by-ratio normalization or TMM), this option should be disabled. In addition, if the input expression matrix only contains a small set of genes, it is suggested to normalize using all genes first before taking the subset.
-- The number of iteration for 2-opt: Default is 20000. Increasing the number of iteration may improve the ordering results, but will result in longer run time.
--	Identify additional dynamic genes based on the recovered order?: If Yes, users can identify additional genes that have dynamic profile following the recovered cell order.
-- What type of trend do you expect?: If we assume the target temporal pattern of each marker is monotone increasing (decreasing) from the first cell to the last cell, **Linear** should be used. If the target temporal pattern is expected to follow a quadratic / cubic / quartic polynomial,  **Quadratic / Cubic / Quartic** should be selected. An example quartic form may be bi-modal expression over time. 
--	Set seed (random number generator): The users can reproduce the results by setting the same seed for different runs.
-- Plot key markers following recovered cell order?: If Yes, expression plots of input markers following recovered cell order will be generated. 
-- Plot additional dynamic genes following recovered cell order?: If Yes, expression plots of additional dynamic genes following recovered cell order will be generated. 
--	Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, top 10 genes will be included in the output plots.
-- Plot in log scale?: Whether plot the expressions in log scale.
+- The number of iteration for 2-opt: Default is 20,000. Increasing the number of iterations may improve the ordering results, but will result in a longer run time.
+
+- Need normalization?: If Yes, normalization using median-by-ratio will be performed prior to the WaveCrest run. If the input matrix is already normalized (e.g. by median-by-ratio normalization or TMM), this option should be disabled by selecting No. In addition, if the input expression matrix only contains a small subset of genes, it is suggested to first perform the normalization using all genes before taking the subset.
+
+- Use log data for input into WaveCrest?: If Yes, data will be logged for the cell reordering. This may alleviate effects due to outliers and produce cleaner results.
+
+- Identify additional dynamic genes based on the recovered order?: If Yes, additional genes that have dynamic profiles similar to the recovered cell order will be identified.
+
+- What type of trend do you expect?: If we assume the target temporal pattern of each marker is monotone increasing (decreasing) from the first cell to the last cell, **Linear** should be used. If the target temporal pattern is expected to follow a quadratic / cubic / quartic polynomial,  **Quadratic / Cubic / Quartic** should be selected. An example quartic form may be bi-modal expression over time. It is important to consider what trend of expression is expected. This will be used to recover the cell order as well as in identifying additional genes.
+
+- Set seed (random number generator): This allows the user to reproduce the results. The same seed number will produce the same results (given the other input is exactly the same).  
+
+- Plot in log scale?: Whether to plot the gene expression on the log scale.
+
+
+- Plot key markers following recovered cell order?: If Yes, expression plots of input markers following the recovered cell order will be generated. 
+
+- Plot additional dynamic genes following recovered cell order?: If Yes, expression plots of additional dynamic genes following the recovered cell order will be generated. 
+
+- Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, the top 10 genes will be included in the output plots.
+
+- Plot heatmap of marker genes following the recovered cell order?: If Yes, then a heatmap will be generate containing the genes from the Marker list with columns ordered according to the recovered cell order.
+- Colors for heatmap: If the box is checked then the default geen red colors will be used, otherwise uncheck this box and select 3 new colors to represent low, middle, and high expression in the heatmap.
+
+- Cluster key makers genes in heatmap?: If Yes, then genes will be ordered according to hierarchal clustering, otherwise the original marker list order will be used.
+
 - Output directory, will be set as home directory (~/) if it is empty.
-- Output file name for input paramters and version info.
+- Output file name for input paramaters and version info.
 - Output file name for the normalized expression following original cell order.
 - Output file name for the normalized expression following recovered cell order.
--	Output file name for the genes sorted by strength of dynamics. This file will not be generate if the second option ("Identify additional dynamic genes") is "No".
--	Output file name for the plots (key markers following recovered order).
--	Output file name for the plots (additional genes following recovered order). This file will not be generate if the second option ("Identify additional dynamic genes") is "No".
+- Output file name for the genes sorted by strength of dynamics. This file will not be generated if the second option ("Identify additional dynamic genes") is "No".
+- Output file name for the plots (key markers following recovered order).
+- Output file name for the plots (additional genes following recovered order). This file will not be generated if the second option ("Identify additional dynamic genes") is "No".
+- Output file name for the heatmap (marker genes following recovered order). This file will not be generated if the option ("Plot heatmap of marker genes") is "No".
 
 ## 4. Outputs
 Two to five files will be generated:

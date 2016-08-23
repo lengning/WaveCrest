@@ -16,7 +16,7 @@ shinyUI(pageWithSidebar(
                fileInput("ConditionVector", label = "Condition vector \n file name (e.g. collection time. support .csv, .txt, .tab)"),
                
                # List of key markers 
-               fileInput("Markers", label = "List of key markers \n file name (support .csv, .txt, .tab)"),
+               fileInput("Markers", label = "List of marker genes \n file name (support .csv, .txt, .tab)"),
                
                column(4,
                       # Num permutation
@@ -64,7 +64,7 @@ shinyUI(pageWithSidebar(
                                    selected = 1),
                       
                       radioButtons("MarkerPlot_buttons",
-                                   label = "Plot key markers following recovered cell order?",
+                                   label = "Plot marker genes following recovered cell order?",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
                                    selected = 1)
@@ -88,7 +88,7 @@ shinyUI(pageWithSidebar(
 								   
 								   
                       radioButtons("AddHeatMap_buttons",
-                                    label = "Plot heatmap of key marker genes following recovered cell order?",
+                                    label = "Plot heatmap of marker genes following recovered cell order?",
                                     choices = list("Yes" = 1,
                                                    "No" = 2),
                                     selected = 1),  
@@ -102,7 +102,7 @@ shinyUI(pageWithSidebar(
                       fluidPage(colourInput("col3", "High values:", "red")),
                       
                       radioButtons("clusterRow",
-                                   label = "Cluster key marker genes in heatmap (otherwise use original order) ? ",
+                                   label = "Cluster marker genes in heatmap (otherwise use original order) ? ",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
                                    selected = 1)
@@ -139,7 +139,7 @@ shinyUI(pageWithSidebar(
                                 value = "genes_by_dynamic"),
                       # plot name
                       textInput("exMarkerPlotFileName", 
-                                label = "Export file name for the plots? (key markers following recovered order)", 
+                                label = "Export file name for the plots? (marker genes following recovered order)", 
                                 value = "PlotMarkers"),
                       # plot name
                       textInput("exDynamicPlotFileName", 
