@@ -127,7 +127,6 @@ shinyServer(function(input, output, session) {
     if(List$test){
     DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
     IdenRes <- WaveCrestIden(DataRemain,ENIRes.Order, Ndg = numdegree)
-    IdenRes <- sort(IdenRes, decreasing = TRUE)
     DGlist <- cbind(names(IdenRes),IdenRes)
     colnames(DGlist) <- c("gene", "MSE")
     write.csv(DGlist,file=List$exDGF)
