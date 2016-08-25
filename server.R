@@ -125,13 +125,17 @@ shinyServer(function(input, output, session) {
 	
 	#Test for additional genes
     if(List$test){
-    DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
-    IdenRes <- WaveCrestIden(DataRemain,ENIRes.Order, Ndg = numdegree)
-    DGlist <- cbind(names(IdenRes),IdenRes)
-    colnames(DGlist) <- c("gene", "MSE")
-    write.csv(DGlist,file=List$exDGF)
+		DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
+		if(List$LogInTF) {
+			LogCutoff = log2(10) #currently no user option to change this, default is 10.
+			IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree, MeanLOD = LogCutoff)
+		} else {IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree)}
+		DGlist <- cbind(names(IdenRes),IdenRes)
+		colnames(DGlist) <- c("gene", "MSE")
+		write.csv(DGlist,file=List$exDGF)
     }
-    if(!List$test){
+    
+	if(!List$test){
       DGlist=c("nope")
     }
       print("Identify additional genes...")
