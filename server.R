@@ -23,7 +23,7 @@ shinyServer(function(input, output, session) {
     Sep=strsplit(the.file,split="\\.")[[1]]
     if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
     if(Sep[length(Sep)]!="csv") {
-      try(a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1))
+      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)))
       if(class(res) == "try-error") {
         a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL)
         a1 <- data.matrix(a0[-1])
