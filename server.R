@@ -22,8 +22,15 @@ shinyServer(function(input, output, session) {
     if(is.null(the.file))stop("Please upload data")
     Sep=strsplit(the.file,split="\\.")[[1]]
     if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
-    if(Sep[length(Sep)]!="csv")a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
-    Data=data.matrix(a1)
+    if(Sep[length(Sep)]!="csv") {
+      try(a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1))
+      if(class(res) == "try-error") {
+        a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL)
+        a1 <- data.matrix(a0[-1])
+        rownames(a1) <- a0[[1]]
+      }
+    }
+        Data=data.matrix(a1)
     
     Group.file <- input$ConditionVector$name
     if(is.null(Group.file))GroupVIn = list(c1=rep(1,ncol(Data)))
