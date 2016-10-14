@@ -21,11 +21,12 @@ shinyServer(function(input, output, session) {
     the.file <- input$filename$name
     if(is.null(the.file))stop("Please upload data")
     Sep=strsplit(the.file,split="\\.")[[1]]
-    if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
+    if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")
     if(Sep[length(Sep)]!="csv") {
-      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)))
+      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")))
+	  print("Initial data import failed, file format may be incorrect. Trying alternate data import...")
       if(class(a1) == "try-error") {
-        a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL)
+        a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL,comment.char="")
         a1 <- data.matrix(a0[-1])
         rownames(a1) <- a0[[1]]
       }
