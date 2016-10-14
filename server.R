@@ -41,7 +41,7 @@ shinyServer(function(input, output, session) {
       if(Group.Sep[length(Group.Sep)]!="csv")GroupVIn=read.table(input$ConditionVector$datapath,stringsAsFactors=F,header=F, sep="\t")
     }
     GroupV=GroupVIn[[1]]
-    if(length(GroupV)!=ncol(Data)) stop("length of the condition vector is not the same as number of cells!")
+    if(length(GroupV)!=ncol(Data)) stop("Length of the condition vector is not the same as the number of cells!")
   
     Marker.file <- input$Markers$name
     if(is.null(Marker.file))MarkerVIn = list(c1=rownames(Data))
@@ -95,7 +95,7 @@ shinyServer(function(input, output, session) {
     Sizes <- MedianNorm(Data)
     if(is.na(Sizes[1])){
       Sizes <- MedianNorm(Data, alternative=TRUE)
-      message("alternative normalization method is applied")
+      message("Alternative normalization method is applied")
     }
     Data <- GetNormalizedMat(Data,Sizes)
     }
@@ -108,8 +108,8 @@ shinyServer(function(input, output, session) {
 	
     # main function
     if(length(which(!List$Marker %in% rownames(Data)))>0) {
-      print("Warning: not all provided markers are in data matrix")
-      List$Marker = intersect(rownames(Data),List$Marker)
+      print("Warning: not all provided markers are in data matrix. Also make sure the marker gene list input file does not contain a header!")
+      List$Marker = intersect(List$Marker,rownames(Data))
     }
 	
 	if(List$LogInTF == TRUE) {
@@ -125,7 +125,7 @@ shinyServer(function(input, output, session) {
     
 	#Get cell orders
     ENIRes <- WaveCrestENI(List$Marker, DataUse.rand, Cond.rand, Ndg = numdegree, N = List$Permu, Seed = List$Seed)	
-    print("WaveCrestENI...")
+    print("Running WaveCrestENI...")
     
 	
 	ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
@@ -133,6 +133,7 @@ shinyServer(function(input, output, session) {
 	
 	#Test for additional genes
     if(List$test){
+		print("Identifying additional genes...")
 		DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
 		if(List$LogInTF) {
 			LogCutoff = log2(10) #currently no user option to change this, default is 10.
@@ -144,9 +145,8 @@ shinyServer(function(input, output, session) {
     }
     
 	if(!List$test){
-      DGlist=c("nope")
-    }
-      print("Identify additional genes...")
+      DGlist=c("Not testing for additional genes")
+    } 
     write.csv(Data, file=List$exExpF) #write input 
     write.csv(Data[,ENIRes.Order], file=List$exENIExpF) #write input with order
     
@@ -249,7 +249,7 @@ shinyServer(function(input, output, session) {
   output$tab <- renderDataTable({
     tmp <- Act()$Sig
     t1 <- tmp
-    print("done")
+    print("Done!")
     t1
   },options = list(lengthManu = c(4,4), pageLength = 20))
   
