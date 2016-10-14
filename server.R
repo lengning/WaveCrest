@@ -23,7 +23,7 @@ shinyServer(function(input, output, session) {
     Sep=strsplit(the.file,split="\\.")[[1]]
     if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")
     if(Sep[length(Sep)]!="csv") {
-      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")))
+      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")), silent=T)
 	  print("Initial data import failed, file format may be incorrect. Trying alternate data import...")
       if(class(a1) == "try-error") {
         a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL,comment.char="")
