@@ -21,9 +21,17 @@ shinyServer(function(input, output, session) {
     the.file <- input$filename$name
     if(is.null(the.file))stop("Please upload data")
     Sep=strsplit(the.file,split="\\.")[[1]]
-    if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
-    if(Sep[length(Sep)]!="csv")a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1)
-    Data=data.matrix(a1)
+    if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")
+    if(Sep[length(Sep)]!="csv") {
+      try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")), silent=T)
+	  print("Initial data import failed, file format may be incorrect. Trying alternate data import...")
+      if(class(a1) == "try-error") {
+        a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL,comment.char="")
+        a1 <- data.matrix(a0[-1])
+        rownames(a1) <- a0[[1]]
+      }
+    }
+        Data=data.matrix(a1)
     
     Group.file <- input$ConditionVector$name
     if(is.null(Group.file))GroupVIn = list(c1=rep(1,ncol(Data)))
@@ -33,7 +41,7 @@ shinyServer(function(input, output, session) {
       if(Group.Sep[length(Group.Sep)]!="csv")GroupVIn=read.table(input$ConditionVector$datapath,stringsAsFactors=F,header=F, sep="\t")
     }
     GroupV=GroupVIn[[1]]
-    if(length(GroupV)!=ncol(Data)) stop("length of the condition vector is not the same as number of cells!")
+    if(length(GroupV)!=ncol(Data)) stop("Length of the condition vector is not the same as the number of cells!")
   
     Marker.file <- input$Markers$name
     if(is.null(Marker.file))MarkerVIn = list(c1=rownames(Data))
@@ -87,7 +95,7 @@ shinyServer(function(input, output, session) {
     Sizes <- MedianNorm(Data)
     if(is.na(Sizes[1])){
       Sizes <- MedianNorm(Data, alternative=TRUE)
-      message("alternative normalization method is applied")
+      message("Alternative normalization method is applied")
     }
     Data <- GetNormalizedMat(Data,Sizes)
     }
@@ -100,8 +108,8 @@ shinyServer(function(input, output, session) {
 	
     # main function
     if(length(which(!List$Marker %in% rownames(Data)))>0) {
-      print("Warning: not all provided markers are in data matrix")
-      List$Marker = intersect(rownames(Data),List$Marker)
+      print("Warning: not all provided markers are in data matrix. Also make sure the marker gene list input file does not contain a header!")
+      List$Marker = intersect(List$Marker,rownames(Data))
     }
 	
 	if(List$LogInTF == TRUE) {
@@ -117,7 +125,7 @@ shinyServer(function(input, output, session) {
     
 	#Get cell orders
     ENIRes <- WaveCrestENI(List$Marker, DataUse.rand, Cond.rand, Ndg = numdegree, N = List$Permu, Seed = List$Seed)	
-    print("WaveCrestENI...")
+    print("Running WaveCrestENI...")
     
 	
 	ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
@@ -125,6 +133,7 @@ shinyServer(function(input, output, session) {
 	
 	#Test for additional genes
     if(List$test){
+		print("Identifying additional genes...")
 		DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
 		if(List$LogInTF) {
 			LogCutoff = log2(10) #currently no user option to change this, default is 10.
@@ -136,9 +145,8 @@ shinyServer(function(input, output, session) {
     }
     
 	if(!List$test){
-      DGlist=c("nope")
-    }
-      print("Identify additional genes...")
+      DGlist=c("Not testing for additional genes")
+    } 
     write.csv(Data, file=List$exExpF) #write input 
     write.csv(Data[,ENIRes.Order], file=List$exENIExpF) #write input with order
     
@@ -241,7 +249,7 @@ shinyServer(function(input, output, session) {
   output$tab <- renderDataTable({
     tmp <- Act()$Sig
     t1 <- tmp
-    print("done")
+    print("Done!")
     t1
   },options = list(lengthManu = c(4,4), pageLength = 20))
   
