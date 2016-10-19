@@ -24,8 +24,8 @@ shinyServer(function(input, output, session) {
     if(Sep[length(Sep)]=="csv")a1=read.csv(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")
     if(Sep[length(Sep)]!="csv") {
       try((a1=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=1,comment.char="")), silent=T)
-	  print("Initial data import failed, file format may be incorrect. Trying alternate data import...")
-      if(class(a1) == "try-error") {
+	  if(!exists("a1")) {
+		  print("Initial data import failed, file format may be incorrect. Trying alternate data import...")
         a0=read.table(input$filename$datapath,stringsAsFactors=F,header=TRUE, row.names=NULL,comment.char="")
         a1 <- data.matrix(a0[-1])
         rownames(a1) <- a0[[1]]
