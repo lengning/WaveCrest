@@ -153,15 +153,15 @@ shinyServer(function(input, output, session) {
     
     if(List$PlotMarkerTF){
       PN <- length(List$Marker)
-        pdf(List$MarkerPlotF, height=10,width=15)
-        par(mfrow=c(3,3))
+        pdf(List$MarkerPlotF, height=12, width=10)
+        par(mfrow=c(5,2),mar=c(5,5,5,5))
         for(i in 1:PN){
           if(List$whetherLog==TRUE) plot(log2(Data[List$Marker[i],ENIRes.Order]+1), 
                                         col=as.numeric(List$Cond), ylab="log2(expression+1)",
-                                        main=List$Marker[i])
+                                        main=List$Marker[i], pch=19)
           if(List$whetherLog==FALSE) plot(Data[List$Marker[i],ENIRes.Order], 
                                         col=as.numeric(List$Cond), ylab="expression",
-                                        main=List$Marker[i] )  
+                                        main=List$Marker[i], pch=19)  
         }
         dev.off()
 		
@@ -202,15 +202,15 @@ shinyServer(function(input, output, session) {
       if(List$PlotN!="")PN <- as.numeric(List$PlotN)
       else PN <- 10  
       if(length(PN)>0){
-        pdf(List$DynamicPlotF, height=10,width=15)
-        par(mfrow=c(3,3))
+        pdf(List$DynamicPlotF, height=12, width=10)
+        par(mfrow=c(5,2),mar=c(5,5,5,5))
         for(i in 1:PN){
             if(List$whetherLog==TRUE) plot(log2(Data[names(IdenRes)[i],ENIRes.Order]+1), 
                                             col=as.numeric(List$Cond), ylab="log2(expression+1)",
-                                            main=names(IdenRes)[i])
+                                            main=names(IdenRes)[i], pch=19)
             if(List$whetherLog==FALSE) plot(Data[names(IdenRes)[i],ENIRes.Order], 
                                            col=as.numeric(List$Cond), ylab="expression",
-                                           main=names(IdenRes)[i])  
+                                           main=names(IdenRes)[i], pch=19)  
         }
         dev.off()
       }}
