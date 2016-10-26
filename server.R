@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
     print("Running WaveCrestENI...")
     
 	
-	if(!FlipOrder) {
+	if(!List$FlipOrder) {
 		ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
 	} else {ENIRes.Order <- rev(colnames(DataUse.rand)[ENIRes])}
 	
