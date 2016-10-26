@@ -95,6 +95,8 @@ If specified, the WaveCrest GUI will further detect additional genes with dynami
 
 - Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, the top 10 genes will be included in the output plots.
 
+- Reverse the recovered cell order: The starting point for WaveCrest is random. Instead of rerunning with another seed, if Yes, this option will just reverse the recovered order.
+
 - Plot heatmap of marker genes following the recovered cell order?: If Yes, then a heatmap will be generate containing the genes from the Marker list with columns ordered according to the recovered cell order.
 - Colors for heatmap: If the box is checked then the default geen red colors will be used, otherwise uncheck this box and select 3 new colors to represent low, middle, and high expression in the heatmap.
 

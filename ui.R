@@ -86,12 +86,7 @@ shinyUI(pageWithSidebar(
                       
                    
 								   
-								   
-                      radioButtons("AddHeatMap_buttons",
-                                    label = "Plot heatmap of marker genes following recovered cell order?",
-                                    choices = list("Yes" = 1,
-                                                   "No" = 2),
-                                    selected = 1),  
+			
 		
                      radioButtons("FlipOrder_buttons",
                                     label = "Reverse the recovered cell order?",
@@ -99,6 +94,13 @@ shinyUI(pageWithSidebar(
                                                  "No" = 2),
                                     selected = 2),  			
 
+				   
+                    radioButtons("AddHeatMap_buttons",
+                                  label = "Plot heatmap of marker genes following recovered cell order?",
+                                  choices = list("Yes" = 1,
+                                                 "No" = 2),
+                                  selected = 1),  
+												  
                       tags$div(tags$b("Select colors for the heatmap :")),
                       checkboxInput("UseCols", "Use default green to red heatmap ? ", TRUE),
                       fluidPage(colourInput("col1", "Low values: ", "green")),
