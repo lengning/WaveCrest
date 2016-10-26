@@ -93,8 +93,12 @@ shinyUI(pageWithSidebar(
                                                    "No" = 2),
                                     selected = 1),  
 		
-									
-                
+                     radioButtons("FlipOrder_buttons",
+                                    label = "Reverse the recovered cell order?",
+                                    choices = list("Yes" = 1,
+                                                 "No" = 2),
+                                    selected = 2),  			
+
                       tags$div(tags$b("Select colors for the heatmap :")),
                       checkboxInput("UseCols", "Use default green to red heatmap ? ", TRUE),
                       fluidPage(colourInput("col1", "Low values: ", "green")),

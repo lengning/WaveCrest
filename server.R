@@ -79,6 +79,7 @@ shinyServer(function(input, output, session) {
       PlotMarkerTF = ifelse(input$MarkerPlot_buttons=="1",TRUE,FALSE), 
       PlotAddTF = ifelse(input$AddPlot_buttons=="1",TRUE,FALSE), 
 	  PlotHeatTF = ifelse(input$AddHeatMap_buttons=="1",TRUE,FALSE),
+	  FlipOrder = ifelse(input$FlipOrder_buttons=="1",TRUE,FALSE),
       whetherLog = ifelse(input$log_whether=="1",FALSE,TRUE),
       PlotN = input$PlotNum,
       MarkerPlotF = paste0(outdir,input$exMarkerPlotFileName,".pdf"),
@@ -128,8 +129,9 @@ shinyServer(function(input, output, session) {
     print("Running WaveCrestENI...")
     
 	
-	ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
-	 
+	if(!FlipOrder) {
+		ENIRes.Order <- colnames(DataUse.rand)[ENIRes]
+	} else {ENIRes.Order <- rev(colnames(DataUse.rand)[ENIRes])}
 	
 	#Test for additional genes
     if(List$test){
