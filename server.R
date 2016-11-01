@@ -136,7 +136,7 @@ shinyServer(function(input, output, session) {
 	#Test for additional genes
     if(List$test){
 		print("Identifying additional genes...")
-		DataRemain <- DataUse[setdiff(rownames(DataUse),List$Marker),]
+		DataRemain <- DataUse
 		if(List$LogInTF) {
 			LogCutoff = log2(10) #currently no user option to change this, default is 10.
 			IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree, MeanLOD = LogCutoff)
