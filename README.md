@@ -93,6 +93,8 @@ If specified, the WaveCrest GUI will further detect additional genes with dynami
 
 - Plot additional dynamic genes following recovered cell order?: If Yes, expression plots of additional dynamic genes following the recovered cell order will be generated. 
 
+- Add trendline to dynamic gene plots?: If Yes, scatterplots will display a fitted polynomial line equal to the degree trend chosen to run WaveCrest (i.e. linear / quadratic / cubic or quartic polynomial).
+
 - Number of additional genes to plot: Number of additional dynamic genes to plot when the previous option is "Yes". If it is not specified, the top 10 genes will be included in the output plots.
 
 - Reverse the recovered cell order: The starting point for WaveCrest is random. Instead of rerunning with another seed, if Yes, this option will just reverse the recovered order. Just make sure to reuse the original seed number!
