@@ -66,6 +66,7 @@ shinyServer(function(input, output, session) {
       Marker=MarkerV,# follow the order they appeared
       test=ifelse(input$Iden_buttons=="1",TRUE,FALSE), 
       testDF=input$DF_buttons, 
+	  AddTrend= ifelse(input$AddTrend_buttons=="1",TRUE,FALSE),
       Seed=input$Seed,
       Dir=outdir, 
       exExpF = paste0(outdir,input$exNormFileName,".csv"),
@@ -158,12 +159,32 @@ shinyServer(function(input, output, session) {
         pdf(List$MarkerPlotF, height=12, width=10)
         par(mfrow=c(5,2),mar=c(5,5,5,5))
         for(i in 1:PN){
-          if(List$whetherLog==TRUE) plot(log2(Data[List$Marker[i],ENIRes.Order]+1), 
+          if(List$whetherLog==TRUE) {
+			  plot(log2(Data[List$Marker[i],ENIRes.Order]+1), 
                                         col=as.numeric(List$Cond), ylab="log2(expression+1)",
                                         main=List$Marker[i], pch=19)
-          if(List$whetherLog==FALSE) plot(Data[List$Marker[i],ENIRes.Order], 
+			  if(List$AddTrend==TRUE){
+				  X <- seq(1:length(ENIRes.Order))
+				  fitg <- lm(log2(Data[List$Marker[i],ENIRes.Order]+1) ~ poly(X,numdegree))
+				  top1 <- predict(fitg)
+				  lines(X, top1, lwd=3, col="black")
+				  # fit2 <- loess(log2(Data[List$Marker[i],ENIRes.Order]+1) ~ X)
+				  # lines(X, predict(fit2), col='black', lwd=3)
+			  }
+			}
+          if(List$whetherLog==FALSE) {
+			  
+			  plot(Data[List$Marker[i],ENIRes.Order], 
                                         col=as.numeric(List$Cond), ylab="expression",
                                         main=List$Marker[i], pch=19)  
+										
+			  if(List$AddTrend==TRUE){
+				  X <- seq(1:length(ENIRes.Order))
+				  fitg <- lm(Data[List$Marker[i],ENIRes.Order] ~ poly(X,numdegree))
+				  top1 <- predict(fitg)
+				  lines(X, top1, lwd=3, col="black")
+			  }						
+		  }
         }
         dev.off()
 		
@@ -207,12 +228,28 @@ shinyServer(function(input, output, session) {
         pdf(List$DynamicPlotF, height=12, width=10)
         par(mfrow=c(5,2),mar=c(5,5,5,5))
         for(i in 1:PN){
-            if(List$whetherLog==TRUE) plot(log2(Data[names(IdenRes)[i],ENIRes.Order]+1), 
+            if(List$whetherLog==TRUE) {
+				plot(log2(Data[names(IdenRes)[i],ENIRes.Order]+1), 
                                             col=as.numeric(List$Cond), ylab="log2(expression+1)",
                                             main=names(IdenRes)[i], pch=19)
-            if(List$whetherLog==FALSE) plot(Data[names(IdenRes)[i],ENIRes.Order], 
+  			  if(List$AddTrend==TRUE){
+  				  X <- seq(1:length(ENIRes.Order))
+				  fitg <- lm(log2(Data[names(IdenRes)[i],ENIRes.Order]+1) ~ poly(X,numdegree))
+				  top1 <- predict(fitg)
+				  lines(X, top1, lwd=3, col="black")
+  			  }									
+			}							
+            if(List$whetherLog==FALSE) {
+				plot(Data[names(IdenRes)[i],ENIRes.Order], 
                                            col=as.numeric(List$Cond), ylab="expression",
                                            main=names(IdenRes)[i], pch=19)  
+ 			  if(List$AddTrend==TRUE){
+ 				  X <- seq(1:length(ENIRes.Order))
+				  fitg <- lm(Data[names(IdenRes)[i],ENIRes.Order] ~ poly(X,numdegree))
+				  top1 <- predict(fitg)
+				  lines(X, top1, lwd=3, col="black")
+ 			  }		
+		  }						   
         }
         dev.off()
       }}

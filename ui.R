@@ -1,14 +1,15 @@
 library(shiny)
 library(shinyFiles)
+library(colourpicker)
 #library(gdata)
-options(shiny.maxRequestSize=500*1024^2) 
+options(shiny.maxRequestSize=500*1024^3) 
 # Define UI for slider demo application
 shinyUI(pageWithSidebar(
   #  Application title
   headerPanel("Wave-Crest"),
   
   # Sidebar with sliders that demonstrate various available options
-  sidebarPanel(width=12,height=20,
+  sidebarPanel(width=12,height=100,
                # file
                fileInput("filename", label = "Data file input (support .csv, .txt, .tab)"),
                
@@ -78,8 +79,13 @@ shinyUI(pageWithSidebar(
                                    label = "Plot additional dynamic genes following recovered cell order?",
                                    choices = list("Yes" = 1,
                                                   "No" = 2),
-                                   selected = 1),        				
-                      # num genes to plot
+                      							selected = 1),        				
+                   radioButtons("AddTrend_buttons",
+                                label = "Add trendline to dynamic gene plots?",
+                                choices = list("Yes" = 1,
+                                               "No" = 2),
+                                selected = 1),        
+				# num genes to plot
                       textInput("PlotNum", 
                                 label = "Number of additional genes to plot (if not specified, top 10 genes will be plotted)", 
                                 value = ""),
