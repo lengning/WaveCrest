@@ -9,7 +9,7 @@ shinyUI(pageWithSidebar(
   headerPanel("Wave-Crest"),
   
   # Sidebar with sliders that demonstrate various available options
-  sidebarPanel(width=12,height=100,
+  sidebarPanel(width=12,height=250,
                # file
                fileInput("filename", label = "Data file input (support .csv, .txt, .tab)"),
                
@@ -37,7 +37,10 @@ shinyUI(pageWithSidebar(
                                 choices = list("Yes" = 1,
                                                "No" = 2),
                                 selected = 1),
-								
+                # Mean Cutoff
+                numericInput("Meancut",
+                             label = "Only analyze genes with a mean larger than:",
+                             value = 10),		
                       # Identify additional genes
                       radioButtons("Iden_buttons",
                                    label = "Identify additional dynamic genes based on the recovered order ('fishing')?",

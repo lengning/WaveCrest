@@ -60,6 +60,7 @@ shinyServer(function(input, output, session) {
       GroupFile=Group.file,
       MarkerFile=Marker.file,
       Permu=input$Permu, 
+      MeanCut=input$Meancut,
       NormTF = ifelse(input$Norm_buttons=="1",TRUE,FALSE), 
 	  LogInTF = ifelse(input$Log_InData=="1",TRUE,FALSE), 
       Cond=factor(GroupV, levels=unique(GroupV)),# follow the order they appeared
@@ -114,6 +115,13 @@ shinyServer(function(input, output, session) {
       List$Marker = intersect(List$Marker,rownames(Data))
     }
 	
+    geneMeans <- rowMeans(DataUse)
+    if(length(which(geneMeans >= List$MeanCut)) == 0) {
+      stop("No genes pass the mean filter!")
+    } else {
+      DataUse <- DataUse[which(geneMeans >= List$MeanCut),]
+    }
+ 
 	if(List$LogInTF == TRUE) {
 		DataUse[which(DataUse < 1)] <- 1 # truncate values less than one
 	    DataUse <- log2(DataUse) # log2 of the truncated data
@@ -124,7 +132,7 @@ shinyServer(function(input, output, session) {
     rd <- sample(1:ncol(DataUse),ncol(DataUse)) 
     DataUse.rand <- DataUse[,rd]
 	Cond.rand <- List$Cond[rd]
-    
+
 	#Get cell orders
     ENIRes <- WaveCrestENI(List$Marker, DataUse.rand, Cond.rand, Ndg = numdegree, N = List$Permu, Seed = List$Seed)	
     print("Running WaveCrestENI...")
@@ -139,9 +147,8 @@ shinyServer(function(input, output, session) {
 		print("Identifying additional genes...")
 		DataRemain <- DataUse
 		if(List$LogInTF) {
-			LogCutoff = log2(10) #currently no user option to change this, default is 10.
-			IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree, MeanLOD = LogCutoff)
-		} else {IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree)}
+			IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree, MeanLOD = -Inf)
+		} else {IdenRes <- WaveCrestIden(DataRemain, ENIRes.Order, Ndg = numdegree, MeanLOD = -Inf)}
 		DGlist <- cbind(names(IdenRes),IdenRes)
 		colnames(DGlist) <- c("gene", "MSE")
 		write.csv(DGlist,file=List$exDGF)
